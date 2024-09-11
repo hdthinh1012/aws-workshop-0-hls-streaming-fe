@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import './upload.css';
+import '../input.css';
 
 const StreamVideo = () => {
     return <>

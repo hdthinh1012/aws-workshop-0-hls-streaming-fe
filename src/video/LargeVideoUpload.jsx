@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { handleVideoUpload, uploadFileSetup, uploadFileInChunks } from '../../vanilla_html/upload.js';
-import './upload.css';
+import '../input.css';
 
 const LargeVideoUpload = () => {
     const formRef = React.useRef();
