@@ -6,7 +6,8 @@ module.exports = {
     entry: './src/index.js',
     output: {
         filename: 'index.js',
-        path: path.resolve(__dirname, 'dist')
+        path: path.resolve(__dirname, 'dist'),
+        clean: true
     },
     module: {
         rules: [
@@ -32,4 +33,15 @@ module.exports = {
             template: path.join(__dirname, "index.html"),
         }),
     ],
+    watch: true,
+    plugins: [
+        new webpack.HotModuleReplacementPlugin(),
+    ],
+    devServer: {
+        static: './dist',
+        hot: true,
+    },
+    stats: {
+        errorDetails: true
+    }
 }
