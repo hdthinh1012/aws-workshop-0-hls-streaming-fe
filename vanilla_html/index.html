@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Large Video Upload</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <div id="react-comp"></div>
+
+    <form id="upload-form">
+        <input type="file" name="video" accept="video/*" required />
+        <button type="submit">Upload Video</button>
+        <div id="progress-container">
+            <div id="progress-bar">
+                <div id="progress"></div>
+            </div>
+            <div id="status"></div>
+            <div id="status-2nd"></div>
+        </div>
+    </form>
+
+    <script src="upload.js"></script>
+</body>
+
+</html>
