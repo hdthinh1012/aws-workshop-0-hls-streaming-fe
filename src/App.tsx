@@ -7,6 +7,7 @@ const router = createBrowserRouter([
     {
         path: '/',
         element: <>
+
             <NavLink to={'/upload'}>Upload Video</NavLink>
             <NavLink to={'/stream'}>Stream Video</NavLink>
         </>

@@ -1,15 +1,14 @@
-import React, { useEffect } from 'react';
-import { handleVideoUpload, uploadFileSetup, uploadFileInChunks } from '../../vanilla_html/upload.js';
+import React, { FormEventHandler, useEffect } from 'react';
 import '../input.css';
 
 const LargeVideoUpload = () => {
-    const formRef = React.useRef();
-    const progressContainerRef = React.useRef();
-    const progressBarRef = React.useRef();
-    const statusElementRef = React.useRef();
-    const status2ndElementRef = React.useRef();
+    const formRef: React.RefObject<HTMLFormElement> = React.useRef<HTMLFormElement>(null);
+    const progressContainerRef: React.RefObject<HTMLDivElement> = React.useRef<HTMLDivElement>(null);
+    const progressBarRef: React.RefObject<HTMLDivElement> = React.useRef<HTMLDivElement>(null);
+    const statusElementRef: React.RefObject<HTMLDivElement> = React.useRef<HTMLDivElement>(null);
+    const status2ndElementRef: React.RefObject<HTMLDivElement> = React.useRef<HTMLDivElement>(null);
 
-    const handleVideoUpload = async (e) => {
+    const handleVideoUpload: FormEventHandler<HTMLFormElement> = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const form = formRef.current;
         const progressContainer = progressContainerRef.current;
@@ -19,10 +18,10 @@ const LargeVideoUpload = () => {
         console.log('progress', progressContainer);
         console.log('statusElement', statusElement);
 
-        const formData = new FormData(form);
-        const file = formData.get('video');
+        const formData = new FormData(form!);
+        const file: FormDataEntryValue | null = formData.get('video');
 
-        if (!file) {
+        if (!file || !(file instanceof File)) {
             alert('Please select a video file');
             return;
         }
@@ -32,47 +31,51 @@ const LargeVideoUpload = () => {
             return;
         }
 
-        progressContainer.style.display = 'block';
-        statusElement.textContent = 'Uploading...';
+        progressContainer!.style.display = 'block';
+        statusElement!.textContent = 'Uploading...';
 
         try {
-            const { success, chunkSum, chunkSize, error } = await uploadFileSetup(file);
+            const { success, chunkSum, chunkSize, error } = (await uploadFileSetup(file)) ?? {};
             console.log('success, chunkSum, chunkSize, error', success, chunkSum, chunkSize, error);
             if (success) {
                 alert(`Prepare to upload chunkSize, chunkSum: ${chunkSize}, ${chunkSum}`);
-                if (await uploadFileInChunks(file, chunkSize, chunkSum)) {
-                    statusElement.textContent = 'Upload successful!';
+                if (await uploadFileInChunks(file, chunkSize!, chunkSum!)) {
+                    statusElement!.textContent = 'Upload successful!';
                 } else {
-                    statusElement.textContent = 'Upload failed!';
+                    statusElement!.textContent = 'Upload failed!';
                 }
             } else {
                 throw `Setup failed": ${error}`;
             }
         } catch (error) {
             console.error('Error:', error);
-            statusElement.textContent = 'Upload failed. Please try again.';
+            statusElement!.textContent = 'Upload failed. Please try again.';
         }
     };
 
-    const uploadFileSetup = async (file) => {
+    const uploadFileSetup = async (file: File): Promise<{
+        success: boolean;
+        chunkSum: number;
+        chunkSize: number;
+        error: any;
+    } | undefined> => {
         try {
             const formData = new FormData();
             formData.append('baseFileName', file.name);
-            formData.append('fileSize', file.size);
+            formData.append('fileSize', file.size.toString());
 
             const response = await fetch('http://localhost:10000/api/video/upload/set-up', {
                 method: 'POST',
                 body: formData,
             });
             const { success, chunkSum, chunkSize, error } = await response.json();
-
             return { success, chunkSum, chunkSize, error };
         } catch (error) {
             alert(`uploadFileSetup: ${error}`);
         }
     }
 
-    const uploadFileInChunks = async (file, chunkSize, chunkSum) => {
+    const uploadFileInChunks = async (file: File, chunkSize: number, chunkSum: number) => {
         const statusElement = statusElementRef.current;
         const status2ndElement = status2ndElementRef.current;
         const progressBar = progressBarRef.current;
@@ -85,8 +88,8 @@ const LargeVideoUpload = () => {
                     const chunk = file.slice(start, start + chunkSize);
                     const formData = new FormData();
                     formData.append('video', chunk, `${file.name}.part_${partIdx}`);
-                    formData.append('chunk', Math.floor(start / chunkSize));
-                    formData.append('totalChunks', chunkSum);
+                    formData.append('chunk', (Math.floor(start / chunkSize)).toString());
+                    formData.append('totalChunks', chunkSum.toString());
                     formData.append('originalname', `${file.name}.part_${partIdx}`);
 
                     const response = await fetch('http://localhost:10000/api/video/upload', {
@@ -96,21 +99,21 @@ const LargeVideoUpload = () => {
 
                     if (response.ok) { // Status 200 - 299
                         const progress = ((start + chunk.size) / file.size) * 100;
-                        progressBar.style.width = `${progress}%`;
-                        statusElement.textContent = `Uploading... ${Math.round(progress)}%`;
+                        progressBar!.style.width = `${progress}%`;
+                        statusElement!.textContent = `Uploading... ${Math.round(progress)}%`;
                         partIdx += 1;
                         break; // Break upload retry loop
                     } else if (retries < 5) {
                         retries += 1;
-                        status2ndElement.textContent = `Uploading part ${partIdx} failed. Retry ${retries} times`;
+                        status2ndElement!.textContent = `Uploading part ${partIdx} failed. Retry ${retries} times`;
                         continue
                     }
 
                     /**
                      * Retries multiple time failed. Cancelling and stop altogether
                      */
-                    statusElement.textContent = `Uploading part ${partIdx} failed after retry ${retries} times. Cancelling upload...`;
-                    status2ndElement.textContent = `Uploading part ${partIdx} failed`;
+                    statusElement!.textContent = `Uploading part ${partIdx} failed after retry ${retries} times. Cancelling upload...`;
+                    status2ndElement!.textContent = `Uploading part ${partIdx} failed`;
                     while (true) {
                         const cancelFormData = new FormData();
                         cancelFormData.append('baseFileName', file.name);
@@ -119,7 +122,7 @@ const LargeVideoUpload = () => {
                             body: cancelFormData
                         });
                         if (cancelResponse.ok) {
-                            statusElement.textContent = `Upload cancelled!`;
+                            statusElement!.textContent = `Upload cancelled!`;
                             break; // Break cancel retry loop
                         }
                     }

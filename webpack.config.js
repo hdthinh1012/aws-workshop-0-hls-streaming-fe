@@ -1,9 +1,10 @@
 const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
-    entry: './src/index.js',
+    entry: './src/index.tsx',
     output: {
         filename: 'index.js',
         path: path.resolve(__dirname, 'dist'),
@@ -12,11 +13,14 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/,
+            },
+            {
                 test: /\.jsx?$/,
                 exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader',
-                }
+                use: 'babel-loader'
             },
             {
                 test: /\.css$/,
@@ -25,7 +29,10 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: ['.js', '.jsx']
+        extensions: ['.ts', '.tsx', '.js', '.jsx'],
+        plugins: [
+            new TsconfigPathsPlugin({ configFile: './tsconfig.json' })
+        ]
     },
     mode: 'development',
     plugins: [
