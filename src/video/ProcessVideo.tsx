@@ -37,7 +37,7 @@ const ProcessVideo = () => {
                 {videos.map(video => (
                     <TableRow>
                         <TableCell className="font-medium">{video["name"]}</TableCell>
-                        <TableCell>{video["info"]["resolution"]}</TableCell>
+                        <TableCell>{`${video["info"]["resolution"]["width"]}x${video["info"]["resolution"]["height"]}`}</TableCell>
                         <TableCell>{video["info"]["bitrate"]}</TableCell>
                         <TableCell>{video["info"]["codec"]}</TableCell>
                         <TableCell>
