@@ -1,7 +1,7 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider, NavLink } from "react-router-dom";
 import LargeVideoUpload from './video/LargeVideoUpload';
-import StreamVideo from "./video/Streaming";
+import StreamVideo, { StreamList } from "./video/Streaming";
 import ProcessVideo from "./video/ProcessVideo";
 import {
     Menubar,
@@ -45,6 +45,10 @@ const router = createBrowserRouter([
     },
     {
         path: '/stream',
+        element: <StreamList />
+    },
+    {
+        path: '/stream/:video',
         element: <StreamVideo />
     },
     {
