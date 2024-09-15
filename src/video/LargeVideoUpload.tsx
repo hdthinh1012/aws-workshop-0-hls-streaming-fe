@@ -1,4 +1,5 @@
 import React, { FormEventHandler, useEffect } from 'react';
+import { Button } from "@/components/ui/button";
 import '../input.css';
 
 const LargeVideoUpload = () => {
@@ -139,7 +140,7 @@ const LargeVideoUpload = () => {
 
     return <form ref={formRef} id="upload-form" onSubmit={handleVideoUpload}>
         <input type="file" name="video" accept="video/*" required />
-        <button type="submit">Upload Video</button>
+        <button type="submit"><Button>Upload Video</Button></button>
         <div ref={progressContainerRef} id="progress-container">
             <div ref={progressBarRef} id="progress-bar">
                 <div id="progress"></div>

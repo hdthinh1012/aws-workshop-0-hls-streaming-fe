@@ -18,7 +18,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { buttonVariants } from "@/components/ui/button"
-import { Routes, Route, useParams, NavLink } from 'react-router-dom';
+import { Routes, Route, useParams, NavLink, Outlet } from 'react-router-dom';
 
 export const StreamList = () => {
     const [streamList, setStreamList] = React.useState([]);
@@ -50,6 +50,8 @@ export const StreamList = () => {
                 ))}
             </TableBody>
         </Table>}
+
+        <Outlet />
     </>
 }
 
@@ -58,10 +60,6 @@ const StreamVideo = () => {
     let { video } = useParams();
     let hls = new Hls();
     useEffect(() => {
-        // I_Am_Legend_-_Trailer.mp4
-        // sintel_trailer-1080p.mp4
-        // http://localhost:10000/static/hls/sintel_trailer-1080p.mp4/480p/prog_index.m3u8
-        // https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8
         try {
             let videoSrc = `http://localhost:10000/static/hls/${video}/master.m3u8`;
             if (Hls.isSupported()) {
@@ -73,7 +71,7 @@ const StreamVideo = () => {
         } catch (error) {
             console.log('streamVideo error', error);
         }
-    }, []);
+    }, [video]);
 
     console.log('hls.currentLevel.toString()', hls.currentLevel.toString());
 
@@ -82,7 +80,7 @@ const StreamVideo = () => {
             autoPlay
             controls
             ref={myRef}
-            style={{ height: 300 }}
+            style={{ height: '60vh' }}
         ></video>
 
         <div className='m-auto'>

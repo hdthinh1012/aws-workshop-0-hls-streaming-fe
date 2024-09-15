@@ -10,7 +10,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 
-const ProcessVideo = () => {
+const UploadInfoVideo = () => {
     const [videos, setVideos] = useState([]);
     useEffect(() => {
         fetch('http://localhost:10000/api/video/process/get-all')
@@ -53,4 +53,4 @@ const ProcessVideo = () => {
     </>
 }
 
-export default ProcessVideo;
+export default UploadInfoVideo;
