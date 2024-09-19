@@ -49,7 +49,7 @@ export async function uploadFileSetup(file) {
         formData.append('baseFileName', file.name);
         formData.append('fileSize', file.size);
 
-        const response = await fetch('http://localhost:10000/api/video/upload/set-up', {
+        const response = await fetch(`http://localhost:10000/api/video/upload/set-up`, {
             method: 'POST',
             body: formData,
         });
@@ -75,7 +75,7 @@ export async function uploadFileInChunks(file, chunkSize, chunkSum) {
                 formData.append('totalChunks', chunkSum);
                 formData.append('originalname', `${file.name}.part_${partIdx}`);
 
-                const response = await fetch('http://localhost:10000/api/video/upload', {
+                const response = await fetch(`http://localhost:10000/api/video/upload`, {
                     method: 'POST',
                     body: formData,
                 });
@@ -100,7 +100,7 @@ export async function uploadFileInChunks(file, chunkSize, chunkSum) {
                 while (true) {
                     const cancelFormData = new FormData();
                     cancelFormData.append('baseFileName', file.name);
-                    const cancelResponse = await fetch('http://localhost:10000/api/video/upload/cancel', {
+                    const cancelResponse = await fetch(`http://localhost:10000/api/video/upload/cancel`, {
                         method: 'DELETE',
                         body: cancelFormData
                     });

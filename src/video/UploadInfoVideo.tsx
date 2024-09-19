@@ -13,7 +13,7 @@ import {
 const UploadInfoVideo = () => {
     const [videos, setVideos] = useState([]);
     useEffect(() => {
-        fetch('http://localhost:10000/api/video/process/get-all')
+        fetch(`${process.env.VITE_SERVER_URL}/api/video/process/get-all`)
             .then(
                 response => response.json()
             ).then(

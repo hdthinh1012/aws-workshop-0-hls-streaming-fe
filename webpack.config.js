@@ -3,6 +3,18 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
+const dotenv = require('dotenv');
+// call dotenv and it will return an Object with a parsed key 
+const env = dotenv.config().parsed;
+
+// reduce it to a nice object, the same as before
+const envKeys = Object.keys(env).reduce((prev, next) => {
+    prev[`process.env.${next}`] = JSON.stringify(env[next]);
+    return prev;
+}, {});
+
+console.log('webpack.config.js envKeys', envKeys);
+
 module.exports = {
     entry: './src/index.tsx',
     output: {
@@ -36,6 +48,7 @@ module.exports = {
     },
     mode: 'development',
     plugins: [
+        new webpack.DefinePlugin(envKeys),
         new HtmlWebpackPlugin({
             template: path.join(__dirname, "index.html"),
         }),

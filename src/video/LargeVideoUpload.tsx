@@ -65,7 +65,7 @@ const LargeVideoUpload = () => {
             formData.append('baseFileName', file.name);
             formData.append('fileSize', file.size.toString());
 
-            const response = await fetch('http://localhost:10000/api/video/upload/set-up', {
+            const response = await fetch(`${process.env.VITE_SERVER_URL}/api/video/upload/set-up`, {
                 method: 'POST',
                 body: formData,
             });
@@ -93,7 +93,7 @@ const LargeVideoUpload = () => {
                     formData.append('totalChunks', chunkSum.toString());
                     formData.append('originalname', `${file.name}.part_${partIdx}`);
 
-                    const response = await fetch('http://localhost:10000/api/video/upload', {
+                    const response = await fetch(`${process.env.VITE_SERVER_URL}/api/video/upload`, {
                         method: 'POST',
                         body: formData,
                     });
@@ -118,7 +118,7 @@ const LargeVideoUpload = () => {
                     while (true) {
                         const cancelFormData = new FormData();
                         cancelFormData.append('baseFileName', file.name);
-                        const cancelResponse = await fetch('http://localhost:10000/api/video/upload/cancel', {
+                        const cancelResponse = await fetch(`${process.env.VITE_SERVER_URL}/api/video/upload/cancel`, {
                             method: 'DELETE',
                             body: cancelFormData
                         });

@@ -24,7 +24,7 @@ export const StreamList = () => {
     const [streamList, setStreamList] = React.useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:10000/api/video/stream/get-all')
+        fetch(`${process.env.VITE_SERVER_URL}/api/video/stream/get-all`)
             .then(
                 response => response.json()
             ).then(
@@ -61,7 +61,7 @@ const StreamVideo = () => {
     let hls = new Hls();
     useEffect(() => {
         try {
-            let videoSrc = `http://localhost:10000/static/hls/${video}/master.m3u8`;
+            let videoSrc = `${process.env.VITE_SERVER_URL}/static/hls/${video}/master.m3u8`;
             if (Hls.isSupported()) {
                 hls.loadSource(videoSrc);
                 hls.attachMedia(myRef.current!);
