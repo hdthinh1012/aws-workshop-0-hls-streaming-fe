@@ -14,5 +14,6 @@ The accompanied back-end repository: [back-end Github Link](https://github.com/h
 touch .env
 echo VITE_SERVER_URL=<your-server-url> > .env
 ```
-3. Install dependencies `npm install`
-4. Run vite react app in hot-reload mode `npm run dev`
+3. Install NVM & Node 18
+4. Install dependencies `npm install`
+5. Run vite react app in hot-reload mode `npm run dev`
