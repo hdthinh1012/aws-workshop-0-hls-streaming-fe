@@ -3,7 +3,7 @@
 ## About the repository
 Contain front-end source code for the project, please refer to the writeup for detail explanation and step by step guide for deploying to AWS EC2.
 
-Writeup link at: [Coming soon](./ "Writeup") 
+Writeup link at: [Link here](https://hdthinh1012.github.io/fcj-workshop-0-writeup/ "Writeup") 
 
 The accompanied back-end repository: [back-end Github Link](https://github.com/hdthinh1012/aws-workshop-0-hls-streaming "Back-end Github Link")
 
